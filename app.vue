@@ -6,3 +6,12 @@
     <NuxtWelcome />
   </div>
 </template>
+<script setup lang="ts">
+import LogRocket from "logrocket";
+LogRocket.init("ulrfwc/test");
+LogRocket.identify("Gopi", {
+  name: "GOPI",
+  email: "test@test.com",
+  subscriptionType: "pro",
+});
+</script>

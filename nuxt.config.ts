@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  imports: { dirs: ["stores"] },
+  ssr: true,
   modules: ["nuxt-quasar-ui"],
   buildModules: ["@nuxtjs/pwa"],
   quasar: {
@@ -7,6 +9,9 @@ export default defineNuxtConfig({
       font: "roboto-font",
       fontIcons: ["material-icons"],
     },
+  },
+  pinia: {
+    autoImports: ["defineStore", "acceptHMRUpdate"],
   },
   pwa: {
     meta: {
@@ -41,6 +46,16 @@ export default defineNuxtConfig({
           ],
         },
       ],
+    },
+  },
+  runtimeConfig: {
+    gwEndPoint: "",
+
+    public: {
+      authClientId: "",
+      authRealm: "",
+      authUrl: "",
+      stripeKey: "",
     },
   },
 });
