@@ -57,5 +57,5 @@ export default defineNuxtConfig({
       authUrl: "",
       stripeKey: "",
     },
-  },
+  }
 });

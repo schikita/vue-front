@@ -17,6 +17,7 @@
     "nuxt-quasar-ui": "^1.7.2"
   },
   "dependencies": {
+    "@fontsource/montserrat": "^5.1.1",
     "@nuxtjs/eslint-module": "^4.0.2",
     "@nuxtjs/html-validator": "^1.2.5",
     "@nuxtjs/robots": "^3.0.0",
@@ -26,8 +27,8 @@
     "logrocket": "^4.0.0",
     "nuxt-icons": "^3.1.0",
     "pinia": "^2.0.35",
-    "sass": "^1.60.0",
-    "quasar": "^2.11.10"
+    "quasar": "^2.11.10",
+    "sass": "^1.60.0"
   },
   "overrides": {
     "vue": "latest"
