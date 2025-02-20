@@ -14,7 +14,9 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@types/node": "^18",
     "nuxt": "^3.4.2",
-    "nuxt-quasar-ui": "^1.7.2"
+    "nuxt-quasar-ui": "^1.7.2",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5"
   },
   "dependencies": {
     "@fontsource/montserrat": "^5.1.1",
@@ -29,8 +31,7 @@
     "logrocket": "^4.0.0",
     "nuxt-icons": "^3.1.0",
     "pinia": "^2.0.35",
-    "quasar": "^2.11.10",
-    "sass": "^1.60.0"
+    "quasar": "^2.11.10"
   },
   "overrides": {
     "vue": "latest"

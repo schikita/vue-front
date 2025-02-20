@@ -48,6 +48,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  css: ['@/assets/styles/app.scss'],
   runtimeConfig: {
     gwEndPoint: "",
 
