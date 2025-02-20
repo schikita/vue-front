@@ -23,6 +23,8 @@
     "@nuxtjs/robots": "^3.0.0",
     "@pinia/nuxt": "^0.4.9",
     "@quasar/extras": "^1.16.2",
+    "axios": "^1.7.9",
+    "js-cookie": "^3.0.5",
     "keycloak-js": "^21.1.0-1",
     "logrocket": "^4.0.0",
     "nuxt-icons": "^3.1.0",
