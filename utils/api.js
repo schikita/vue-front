@@ -110,4 +110,22 @@ export const authenticateUser = async (data) => {
   }
 };
 
+export const getCurrencyRates = async () => {
+  try {
+    const response = await api.get('/api/v1/currency-rates/');
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении данных о курсах валют:", error);
+  }
+};
+
+export const getWeather = async () => {
+  try {
+    const response = await api.get('/api/v1/weather/current/');
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении данных о погоде:", error);
+  }
+};
+
 export default api;

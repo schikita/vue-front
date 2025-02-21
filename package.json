@@ -31,7 +31,8 @@
     "logrocket": "^4.0.0",
     "nuxt-icons": "^3.1.0",
     "pinia": "^2.0.35",
-    "quasar": "^2.11.10"
+    "quasar": "^2.11.10",
+    "zod": "^3.24.2"
   },
   "overrides": {
     "vue": "latest"
