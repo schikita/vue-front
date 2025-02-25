@@ -1,62 +1,71 @@
 <template>
-    <form @submit.prevent="handleSubmit">
-      <q-input
-        v-model="code"
-        label="Код из письма"
-        type="text"
-        :rules="[val => val && val.length === 6 || 'Код должен быть из 6 цифр']"
-        filled
-      />
-      <q-btn label="Подтвердить код" type="submit" color="primary" :loading="loading" />
-      <div v-if="error" class="text-negative">{{ error }}</div>
-    </form>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  
-  const code = ref('');
-  const loading = ref(false);
-  const error = ref('');
-  const router = useRouter();
-  const email = ref('');
-  
-  const handleSubmit = async () => {
-    loading.value = true;
-    error.value = '';
-  
-    try {
-      const response = await verifyCode(email.value, code.value);
-      if (response.status === 200) {
-        $emit('verification-success');
-        router.push('/profile'); // Переход в личный кабинет
-      }
-    } catch (err) {
-      error.value = 'Неверный код';
-    } finally {
-      loading.value = false;
+  <form @submit.prevent="handleSubmit">
+    <q-input
+      v-model="code"
+      label="Проверочный код"
+      type="text"
+      :rules="[val => val && val.length === 6 || 'Код должен состоять из 6 цифр']"
+      filled
+    />
+    <q-btn label="Проверить код" type="submit" color="primary" :loading="loading" />
+    <div v-if="error" class="text-negative">{{ error }}</div>
+  </form>
+</template>
+
+<script setup>
+import { ref, defineProps } from 'vue';
+import { AuthUserVerifyEmail } from '@/utils/api'; // Путь к вашему API
+import { useRouter } from 'vue-router'; // Для роутинга
+import { z } from 'zod'; // Для валидации
+
+// Валидация кода
+const codeSchema = z.string().regex(/^\d{6}$/, { message: "Код должен состоять из 6 цифр" });
+
+const code = ref('');
+const loading = ref(false);
+const error = ref('');
+const props = defineProps({
+  email: {
+    type: String,
+    required: true,  // Email должен быть передан в компонент
+  },
+});
+
+const router = useRouter();
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  loading.value = true;
+  error.value = "";
+
+  // Убедитесь, что email не пустой и является строкой
+  if (!props.email || typeof props.email !== 'string' || !props.email.trim()) {
+    error.value = "Email не может быть пустым";
+    loading.value = false;
+    return;
+  }
+
+  const validation = codeSchema.safeParse(code.value);
+  if (!validation.success) {
+    error.value = validation.error.errors[0].message;
+    loading.value = false;
+    return;
+  }
+
+  try {
+    // Запрос на подтверждение email
+    const response = await AuthUserVerifyEmail({ email: props.email, code: code.value });
+    
+    if (response.status === 200 || response.status === 201) {
+      router.push("/profile"); // Переход на страницу профиля
+    } else {
+      error.value = "Неверный код или срок действия истек. Попробуйте еще раз.";
     }
-  };
-  
-  const verifyCode = async (email, code) => {
-    try {
-      const response = await fetch('/api/verify-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, code }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Неверный код');
-      }
-      return response;
-    } catch (error) {
-      console.error(error);
-      throw new Error('Неверный код');
-    }
-  };
-  </script>
-  
+  } catch (err) {
+    console.error('Ошибка при отправке запроса: ', err);
+    error.value = "Ошибка при отправке запроса. Попробуйте еще раз.";
+  } finally {
+    loading.value = false;
+  }
+};
+</script>

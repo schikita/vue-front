@@ -13,8 +13,8 @@ import Header from './components/Header.vue';
 
 <style scoped>
 .q-page-container {
-  padding: 30px;
+  padding: 10px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto;  
 }
 </style>

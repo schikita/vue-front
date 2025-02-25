@@ -175,11 +175,6 @@ const openAuthModal = () => {
   margin-right: 6px;
 }
 
-.q-page-container {
-  padding: 20px 50px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
 
 .val-1 {
   margin-left: 10px;

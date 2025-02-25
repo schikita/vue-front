@@ -1,100 +1,90 @@
 <template>
-  <q-page class="container">
-    <!-- Заголовок новости -->
-    <h2>{{ story.title }}</h2>
-    
-    <!-- Изображение новости -->
-    <q-img :src="story.main_image" alt="Main Image" :ratio="16/9" class="q-mb-md"/>
+  <div class="home-page">
+    <q-layout>
+      <q-page-container>
+        <div class="slider">
+          <CategorySlider :categories="categories" @selectCategory="changeTab" />
+        </div>
+        
+        
+        <!-- Контент по выбранной категории -->
+        <div class="content">
+          <div class="main-content">
+            <div v-if="activeTab === 'Культура'">Контент по категории "Культура"</div>
+            <div v-if="activeTab === 'Наука и техника'">Контент по категории "Наука и техника"</div>
+            <!-- Добавьте другие категории здесь -->
+          </div>
 
-    <!-- Описание новости -->
-    <p>{{ story.description }}</p>
-    
-    <!-- Текст новости -->
-    <div v-html="story.text"></div>
-
-    <!-- Ссылки на источник и категорию -->
-    <div>
-      <a :href="story.url" target="_blank">Читать статью</a>
-      <p>Категория: {{ story.category.name }}</p>
-    </div>
-
-    <!-- Слайдер с изображениями из источников -->
-    <q-slider 
-      v-if="story.main_images.length > 0"
-      v-model="sliderValue"
-      :min="0"
-      :max="story.main_images.length - 1"
-      :step="1"
-      :label="true"
-      :labels="story.main_images.map((_, index) => index + 1)"
-      class="q-mt-md"
-      color="primary"
-    />
-    <q-img 
-      :src="story.main_images[sliderValue]"
-      alt="Source Image"
-      :ratio="16/9"
-      class="q-mb-md"
-    />
-
-    <!-- Кнопка для перехода к первоисточнику -->
-    <q-btn 
-      :to="story.source.url" 
-      label="Читать первоисточник" 
-      color="primary" 
-      class="full-width q-mt-md" 
-      target="_blank"
-    />
-  </q-page>
+          <div class="sidebar">
+            <!-- Рекламный блок -->
+            <div>Рекламный блок</div>
+          </div>
+        </div>
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import CategorySlider from '../components/Homepage/CategorySlider';  // Импортируем компонент слайдера
 
-const story = ref({
-  title: '',
-  main_image: '',
-  description: '',
-  text: '',
-  url: '',
-  category: {
-    name: ''
-  },
-  main_images: [],
-  source: {
-    url: ''
-  }
-});
+// Состояние для категорий и активного таба
+const categories = ref([]);
+const activeTab = ref('Культура');
 
-const sliderValue = ref(0);  // Значение слайдера для фотографий
-
-const fetchStory = async () => {
+// Функция для получения данных категорий с API
+const fetchCategories = async () => {
   try {
-    const response = await axios.get('https://zn.by/api/v1/stories/70957/');
-    const data = response.data;
-    
-    story.value = {
-      title: data.news_articles[0].title,
-      main_image: data.main_images[0],
-      description: data.news_articles[0].description,
-      text: data.news_articles[0].text,
-      url: data.news_articles[0].url,
-      category: data.news_articles[0].category,
-      main_images: data.main_images,  // Список фотографий
-      source: data.news_articles[0].source, // Источник новости
-    };
+    const response = await axios.get('https://zn.by/api/v1/categories/');
+    categories.value = response.data;
+    activeTab.value = response.data[0]?.code_name;  // Устанавливаем активную категорию по умолчанию
   } catch (error) {
-    console.error('Ошибка при загрузке данных:', error);
+    console.error('Ошибка при загрузке категорий:', error);
   }
 };
 
-onMounted(fetchStory);
+// Функция для смены активного таба
+const changeTab = (tab) => {
+  activeTab.value = tab;
+};
+
+// Загружаем категории при монтировании компонента
+onMounted(() => {
+  fetchCategories();
+});
 </script>
 
 <style scoped>
-.container {
-  max-width: 900px;
-  margin: 20px auto;
+
+.slider {
+  padding: 30px 0;
+}
+
+.q-layout,
+.q-page-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+}
+
+.main-content {
+  flex: 3;
+  border: 1px solid #8b8b8b7c;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 300px;
+}
+
+.sidebar {
+  border: 1px solid #8b8b8b7c;
+  border-radius: 10px;
+  padding: 15px;
+  width: 300px;
 }
 </style>

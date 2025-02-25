@@ -128,4 +128,15 @@ export const getWeather = async () => {
   }
 };
 
+export const AuthUserVerifyEmail = async ({ email, code }) => {
+  try {
+    const response = await axios.post('https://zn.by/api/auth/verify/', { email, code });
+    return response;
+  } catch (error) {
+    console.error('Ошибка при отправке запроса: ', error);
+    throw error;
+  }
+};
+
+
 export default api;
